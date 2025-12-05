@@ -51,4 +51,21 @@ export class AuthService {
       disabled: userRecord.disabled,
     };
   }
+
+  async getUserwf(uid: string) {
+    const userRecord = await admin.auth().getUser(uid);
+    return {
+     userRecord
+    };
+  }
+
+   async assignRole(uid: string, role: string) {
+    await admin.auth().setCustomUserClaims(uid, { role });
+
+    return {
+      message: 'Role assigned successfully',
+      uid,
+      role
+    };
+  }
 }
