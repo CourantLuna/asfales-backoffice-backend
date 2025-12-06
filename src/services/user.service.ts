@@ -17,6 +17,7 @@ export class UserService {
           email: u.email!,
           displayName: u.displayName || "",
           role: u.customClaims?.role || "user",
+          disabled: u.disabled
         }));
 
     } catch (error) {
@@ -57,6 +58,24 @@ export class UserService {
       throw new InternalServerErrorException("No se pudo crear el usuario");
     }
   }
+
+/** Habilitar o deshabilitar usuario */
+async toggleUserStatus(uid: string, disabled: boolean) {
+  if (!uid) throw new BadRequestException("UID es requerido");
+
+  try {
+    const userRecord = await admin.auth().updateUser(uid, { disabled });
+    return {
+      message: `Usuario ${disabled ? "deshabilitado" : "habilitado"} correctamente`,
+      uid: userRecord.uid,
+      disabled: userRecord.disabled,
+    };
+  } catch (error) {
+    console.error("Error al cambiar estado de usuario:", error);
+    throw new InternalServerErrorException("No se pudo cambiar el estado del usuario");
+  }
+}
+
 
   /** Eliminar usuario por UID */
   async deleteUser(dto: DeleteUserDto) {

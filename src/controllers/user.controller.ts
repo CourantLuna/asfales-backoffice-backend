@@ -35,6 +35,13 @@ export class UserController {
     return this.userService.assignRole(uid, role);
   }
 
+  // Habilitar / Deshabilitar usuario
+  @UseGuards(FirebaseAuthGuard)
+  @Post('toggle-status')
+  async toggleStatus(@Body('uid') uid: string, @Body('disabled') disabled: boolean) {
+    return this.userService.toggleUserStatus(uid, disabled);
+  }
+
   // Verificar si un usuario es admin
   @UseGuards(FirebaseAuthGuard)
   @Get('check-admin/:uid')

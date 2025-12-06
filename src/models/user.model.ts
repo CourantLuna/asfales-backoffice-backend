@@ -4,6 +4,7 @@ export type User = {
   email: string;
   displayName?: string;
   role?: string;
+  disabled?: boolean;
 };
 
 export type CreateUserDto = {
