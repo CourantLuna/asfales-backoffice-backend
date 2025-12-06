@@ -59,6 +59,12 @@ export class AuthService {
     };
   }
 
+  async isAdmin(uid: string): Promise<boolean> {
+  const userRecord = await admin.auth().getUser(uid);
+  const claims = userRecord.customClaims;
+  return claims?.role === 'admin';
+}
+
    async assignRole(uid: string, role: string) {
     await admin.auth().setCustomUserClaims(uid, { role });
 

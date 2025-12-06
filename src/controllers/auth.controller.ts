@@ -1,4 +1,4 @@
-import { Controller, Post, Body, UseGuards, Get, Req } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Get, Req, Param, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from '../services/auth.service';
 import { FirebaseAuthGuard } from '../guards/firebase-auth.guard';
 import { RegisterUserDto } from '../dto/register-user.dto';
@@ -22,6 +22,15 @@ export class AuthController {
   @Get('profilesw')
   async getProfilesw(@Req() req) {
     return this.authService.getUserwf(req.user.uid);
+  }
+
+   @Get('check-admin/:uid')
+  async checkAdmin(@Param('uid') uid: string) {
+    const isAdmin = await this.authService.isAdmin(uid);
+    if (!isAdmin) {
+      throw new UnauthorizedException('Usuario no autorizado');
+    }
+    return { uid, isAdmin };
   }
 
 @Post('assign-role')
