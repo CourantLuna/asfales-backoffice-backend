@@ -12,6 +12,7 @@ export class FirebaseAuthGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
 
     const header = req.headers['authorization'];
+
     if (!header) {
       throw new UnauthorizedException('Missing Authorization header');
     }
